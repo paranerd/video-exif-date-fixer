@@ -1,6 +1,8 @@
 # Video EXIF Date Editor
 
-This fixes an issue where videos end up with the wrong date caused by changing timezones and thus breaking media timelines.
+This fixes an issue in Synology Photos where videos would end up with the wrong date caused by changing timezones and thus breaking media timelines.
+
+
 
 ## Prerequisites
 

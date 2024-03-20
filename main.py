@@ -15,18 +15,19 @@ def format_delta(delta):
    return '{}{}:00'.format(prefix, hours)
 
 def update(path, delta):
+  print('Updating {}...'.format(path))
+
   filename = os.path.basename(path)
-  args = ['exiftool', filename]
   datetime = extract_datetime(filename)
 
   corrected_datetime = datetime + delta * 10**7
   formatted_delta = format_delta(delta)
 
-  args.append('-AllDates={0}{1}'.format(corrected_datetime, formatted_delta))
-
-  subprocess.check_call(args, executable="/usr/local/bin/exiftool", stdout=sys.stdout, stderr=sys.stderr)
-
-  print('Updated {} to {}{}'.format(path, corrected_datetime, formatted_delta))
+  try:
+     cmd = 'exiftool -QuickTime:CreationDate={}{} {}'.format(corrected_datetime, formatted_delta, path)
+     subprocess.run([cmd], shell=True, check=True, capture_output=True)
+  except subprocess.CalledProcessError as err:
+    print('Error updating: {} STDOUT: {})'.format(err.stderr.decode('utf-8'), err.stdout.decode('utf-8')))
 
 def get_all_files(dir):
   paths = []
