@@ -52,4 +52,4 @@ if __name__ == '__main__':
 
   # Rename
   for file in files:
-     update(file, args.delta)
+    update(file, args.delta)
