@@ -6,7 +6,7 @@ import sys
 
 def extract_datetime(filename):
     matches = re.findall('\\d{2,}+', filename)
-    return int(''.join(matches))
+    return int(''.join(matches[:2]))
 
 def format_delta(delta):
    hours = re.findall('\\d+', str(delta))[0]
@@ -29,11 +29,11 @@ def update(path, delta):
   except subprocess.CalledProcessError as err:
     print('Error updating: {} STDOUT: {})'.format(err.stderr.decode('utf-8'), err.stdout.decode('utf-8')))
 
-def get_all_files(dir):
+def get_all_files(dir, prefix=None, extension='.mp4'):
   paths = []
 
   for file in os.listdir(dir):
-    if file.endswith('.mp4'):
+    if (prefix == None or file.startswith(prefix)) and file.endswith(extension):
       paths.append(os.path.join(dir, file))
 
   return paths
@@ -43,10 +43,12 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('path', type=str)
   parser.add_argument('delta', type=int)
+  parser.add_argument('--prefix', type=str, required=False)
+  parser.add_argument('--extension', type=str, required=False)
   args = parser.parse_args()
 
   # Get all files
-  files = get_all_files(args.path)
+  files = get_all_files(args.path, args.prefix, args.extension)
 
   # Rename
   for file in files:
