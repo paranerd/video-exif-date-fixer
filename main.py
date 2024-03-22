@@ -29,11 +29,11 @@ def update(path, delta):
   except subprocess.CalledProcessError as err:
     print('Error updating: {} STDOUT: {})'.format(err.stderr.decode('utf-8'), err.stdout.decode('utf-8')))
 
-def get_all_files(dir, prefix=None, extension='.mp4'):
+def get_all_files(dir, prefix=None):
   paths = []
 
   for file in os.listdir(dir):
-    if (prefix == None or file.startswith(prefix)) and file.endswith(extension):
+    if (prefix == None or file.startswith(prefix)) and file.endswith('.mp4'):
       paths.append(os.path.join(dir, file))
 
   return paths
@@ -44,11 +44,10 @@ if __name__ == '__main__':
   parser.add_argument('path', type=str)
   parser.add_argument('delta', type=int)
   parser.add_argument('--prefix', type=str, required=False)
-  parser.add_argument('--extension', type=str, required=False)
   args = parser.parse_args()
 
   # Get all files
-  files = get_all_files(args.path, args.prefix, args.extension)
+  files = get_all_files(args.path, args.prefix)
 
   # Rename
   for file in files:
