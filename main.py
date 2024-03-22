@@ -29,12 +29,15 @@ def update(path, delta):
   except subprocess.CalledProcessError as err:
     print('Error updating: {} STDOUT: {})'.format(err.stderr.decode('utf-8'), err.stdout.decode('utf-8')))
 
-def get_all_files(dir, prefix=None):
+def get_all_files(path, prefix=None):
+  if os.path.isfile(path):
+    return [path]
+  
   paths = []
 
-  for file in os.listdir(dir):
+  for file in os.listdir(path):
     if (prefix == None or file.startswith(prefix)) and file.endswith('.mp4'):
-      paths.append(os.path.join(dir, file))
+      paths.append(os.path.join(path, file))
 
   return paths
 
