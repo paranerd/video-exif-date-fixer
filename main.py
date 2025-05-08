@@ -1,9 +1,11 @@
 import argparse
 from datetime import datetime
 import os
+import sys
 from pathlib import Path
 import re
 import subprocess
+import zoneinfo
 from zoneinfo import ZoneInfo
 
 def extract_datestring(path, expression='_(\\d{2,}+)_(\\d{2,}+)'):
@@ -44,6 +46,14 @@ def get_all_files(dir, prefix=None):
       paths.append(os.path.join(dir, file))
 
   return paths
+
+def print_timezones():
+  if (len(sys.argv) == 1):
+    print_timezones()
+    sys.exit(0)
+
+  for tz in sorted(zoneinfo.available_timezones()):
+    print(tz)
 
 if __name__ == '__main__':
   # Get path from arguments
